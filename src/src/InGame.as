@@ -1,6 +1,8 @@
 package src 
 {
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -14,6 +16,9 @@ package src
 		private var towers : Array = [];
 		
 		private var rockets : Array = [];
+		
+		private var explosions : Array = [];
+		
 		private var _location : Vector2D = new Vector2D();
 		private var _velocity : Vector2D = new Vector2D();
 		private var shotClicked : Vector2D = new Vector2D();
@@ -79,7 +84,8 @@ package src
 				rockets.push(rocket);
 				
 				addChildAt(rocket,0);
-				spawnEnemyRockets();
+				//spawnEnemyRockets();
+				
 				
 			}else {
 				towers[chooseTower].reload();
@@ -96,12 +102,43 @@ package src
 				
 				if (rockets[i].y <= rockets[i].destination) {
 					
-					//explosion
-					removeChild(rockets[i]);
-					rockets.splice(i, 1);
+					explode(i);
 				}
 				
 			}
+			
+			for (var j : int = 0; j < explosions.length; j++) {
+				
+				if(explosions[j].maxSize == false){
+					explosions[j].scaleX += 0.1;
+					explosions[j].scaleY += 0.1;
+				}
+				else {
+					explosions[j].scaleX -= 0.1;
+					explosions[j].scaleY -= 0.1;
+				}
+				if(explosions[j].scaleX > 4) { // <-- max grote van de explosie
+					explosions[j].maxSize = true;
+				}
+				if (explosions[j].scaleX < 0) {
+					removeChild(explosions[j]);
+					explosions.splice(j, 1);
+				}
+			}
+		}
+		
+		public function explode(i : int):void {
+			
+			var explosion : Explosion = new Explosion();
+			
+			explosion.x = rockets[i].x;
+			explosion.y = rockets[i].y;
+			explosions.push(explosion);
+			addChild(explosion);
+					
+			removeChild(rockets[i]);
+			rockets.splice(i, 1);
+			
 		}
 		
 		private function spawnEnemyRockets():void {
