@@ -18,7 +18,6 @@ package src
 		private var _velocity : Vector2D = new Vector2D();
 		private var shotClicked : Vector2D = new Vector2D();
 		
-		//private var mousePosition : Vector2D;
 		
 		public function InGame() 
 		{
@@ -30,13 +29,12 @@ package src
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
 			
-			//mousePosition = new Vector2D();
 			
 			for (var i : int = 0; i < 3; i++) {
 				
 				createTower();
-				towers[i].x = stage.stageWidth * (i* 0.5);
-				//trace(towers[i].x);
+				towers[i].x = stage.stageWidth * (i * 0.5);
+				
 				towers[i].y = stage.stageHeight - towers[i].height / 2;
 			}
 			
@@ -52,22 +50,8 @@ package src
 		
 		private function loop(e:Event):void 
 		{	
-			//movement();
 			rocketsUpdate();
 		}
-		
-		/*
-		private function movement():void 
-		{
-			for (var i : int = 0; i < towers.length; i ++) {
-				towers[i].rotation = 0;
-				mousePosition.x = towers[i].mouseX;
-				mousePosition.y = towers[i].mouseY;
-				towers[i].rotation = mousePosition.angle * 180 / Math.PI;
-			}
-		}*/
-		
-		
 		
 		private function shoot(e:MouseEvent):void {
 			
@@ -107,17 +91,9 @@ package src
 			
 			for (var i : int = 0; i < rockets.length; i++) {
 				
-				//var des : Vector2D = rockets[i].destination;
-				//_location.x = rockets[i].x;
-				//_location.y = rockets[i].y; 
-				//var step : Vector2D = des.subtract(_location);
-				//var unit : Vector2D = step.normalize();
-				//_velocity = unit.multiply(rockets[i].speed);
-				//rockets[i].y += _velocity.y;
-				
 				rockets[i].x += rockets[i].movement.x * rockets[i].speed;
 				rockets[i].y += rockets[i].movement.y * rockets[i].speed;
-				//trace(rockets[rockets.length - 1].y);
+				
 				if (rockets[i].y <= rockets[i].destination) {
 					
 					//explosion
