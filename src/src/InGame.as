@@ -17,7 +17,7 @@ package src
 		
 		private var rockets : Array = [];
 		
-		private var explosions : Array = [];
+		public var explosions : Array = [];
 		
 		private var _location : Vector2D = new Vector2D();
 		private var _velocity : Vector2D = new Vector2D();
@@ -84,7 +84,7 @@ package src
 				rockets.push(rocket);
 				
 				addChildAt(rocket,0);
-				//spawnEnemyRockets();
+				spawnEnemyRockets();
 				
 				
 			}else {
@@ -102,7 +102,7 @@ package src
 				
 				if (rockets[i].y <= rockets[i].destination) {
 					
-					explode(i);
+					explode(rockets[i]);
 				}
 				
 			}
@@ -127,18 +127,18 @@ package src
 			}
 		}
 		
-		public function explode(i : int):void {
+		public function explode(target : DisplayObject):void {
 			
 			var explosion : Explosion = new Explosion();
 			
-			explosion.x = rockets[i].x;
-			explosion.y = rockets[i].y;
+			explosion.x = target.x;
+			explosion.y = target.y;
 			explosions.push(explosion);
 			addChild(explosion);
 					
-			removeChild(rockets[i]);
-			rockets.splice(i, 1);
-			
+			removeChild(target);
+			var index : int = rockets.indexOf(target);
+			rockets.splice(index, 1);
 		}
 		
 		private function spawnEnemyRockets():void {
