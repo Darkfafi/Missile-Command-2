@@ -105,9 +105,10 @@ package src
 					explode(rockets[i]);
 				}
 				
+				//hit test with explosions
 				for (var k : int = 0; k < explosions.length; k++) {
 					if(rockets[i] != null){
-						if (rockets[i].hitTestObject(explosions[k]) && rockets[i].id == 2) {
+						if (explosions[k].hitTestObject(rockets[i]) && rockets[i].id == 2) {
 							explode(rockets[i]);
 						}
 					}

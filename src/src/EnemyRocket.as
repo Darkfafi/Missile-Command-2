@@ -12,7 +12,7 @@ package src
 		{
 			super();
 			id = 2;
-			speed = 4;
+			speed = 1.3;
 		}
 	}
 }

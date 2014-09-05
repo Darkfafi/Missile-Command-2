@@ -12,7 +12,7 @@ package src
 	{
 		public var id : int = 1;
 		
-		public var speed : int = 8; 
+		public var speed : Number = 15; 
 		
 		public var movement : Point = new Point();
 		
