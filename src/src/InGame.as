@@ -27,7 +27,7 @@ package src
 		public function InGame() 
 		{
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
-			
+			//-----------Background-------------\\
 			graphics.beginFill(0x6495ed, 1);
 			graphics.drawRect(0, 0, 800, 600);
 			graphics.endFill();
@@ -35,6 +35,7 @@ package src
 			graphics.beginFill(0x696969, 1);
 			graphics.drawRect(0, 550, 800, 50);
 			graphics.endFill();
+			//------------------------------------//
 		}
 		
 		private function init(e:Event):void 
