@@ -105,6 +105,13 @@ package src
 					explode(rockets[i]);
 				}
 				
+				for (var k : int = 0; k < explosions.length; k++) {
+					if(rockets[i] != null){
+						if (rockets[i].hitTestObject(explosions[k]) && rockets[i].id == 2) {
+							explode(rockets[i]);
+						}
+					}
+				}
 			}
 			
 			for (var j : int = 0; j < explosions.length; j++) {
@@ -163,7 +170,6 @@ package src
 			rockets.push(enemyRocket);
 			
 			addChild(enemyRocket);
-			
 		}
 	}
 

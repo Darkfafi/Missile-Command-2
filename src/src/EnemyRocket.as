@@ -7,14 +7,12 @@ package src
 	 */
 	public class EnemyRocket extends Rocket
 	{
-		private var inGame :InGame = new InGame();
 		
 		public function EnemyRocket() 
 		{
 			super();
 			id = 2;
+			speed = 4;
 		}
-		
 	}
-
 }

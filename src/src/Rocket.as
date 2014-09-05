@@ -20,12 +20,12 @@ package src
 		
 		public function Rocket() 
 		{
-			graphics.beginFill(0x00ff00, 1);
-			graphics.drawRect(0, -2, 20, 4);
-			graphics.endFill();
-			
 			graphics.beginFill(0x000000, 1);
 			graphics.drawCircle(20, 0, 2);
+			graphics.endFill();
+			
+			graphics.beginFill(0x00ff00, 1);
+			graphics.drawRect(0, -2, 20, 4);
 			graphics.endFill();
 		}
 		
