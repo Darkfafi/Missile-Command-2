@@ -118,14 +118,14 @@ package src
 			for (var j : int = 0; j < explosions.length; j++) {
 				
 				if(explosions[j].maxSize == false){
-					explosions[j].scaleX += 0.1;
-					explosions[j].scaleY += 0.1;
+					explosions[j].scaleX += 0.2;
+					explosions[j].scaleY += 0.2;
 				}
 				else {
-					explosions[j].scaleX -= 0.1;
-					explosions[j].scaleY -= 0.1;
+					explosions[j].scaleX -= 0.2;
+					explosions[j].scaleY -= 0.2;
 				}
-				if(explosions[j].scaleX > 4) { // <-- max grote van de explosie
+				if(explosions[j].scaleX > 7) { // <-- max grote van de explosie
 					explosions[j].maxSize = true;
 				}
 				if (explosions[j].scaleX < 0) {

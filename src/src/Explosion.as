@@ -11,7 +11,7 @@ package src
 		
 		public function Explosion() 
 		{
-			graphics.beginFill(0x992266);
+			graphics.beginFill(0xff4500);
 			graphics.drawCircle(0, 0, 5);
 			graphics.endFill();
 		}
