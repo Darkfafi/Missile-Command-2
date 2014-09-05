@@ -27,6 +27,14 @@ package src
 		public function InGame() 
 		{
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
+			
+			graphics.beginFill(0x6495ed, 1);
+			graphics.drawRect(0, 0, 800, 600);
+			graphics.endFill();
+			
+			graphics.beginFill(0x696969, 1);
+			graphics.drawRect(0, 550, 800, 50);
+			graphics.endFill();
 		}
 		
 		private function init(e:Event):void 
@@ -60,7 +68,17 @@ package src
 		
 		private function shoot(e:MouseEvent):void {
 			
-			var chooseTower : int = Math.random() * towers.length
+			var close : Number = new Number(Number.MAX_VALUE);
+			var chooseTower : int;
+			
+			for (var i : int = 0; i < towers.length; i++) {
+				
+				if (towers[i].mouseX + towers[i].mouseY < close) {
+					
+					close = towers[i].mouseX + towers[i].mouseY;
+					chooseTower = i;
+				}	
+			}
 			trace("Ammo: " + towers[chooseTower].ammo);
 			
 			if(towers[chooseTower].ammo > 0){
