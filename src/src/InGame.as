@@ -28,6 +28,7 @@ package src
 		{
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
 			//-----------Background-------------\\
+			
 			graphics.beginFill(0x6495ed, 1);
 			graphics.drawRect(0, 0, 800, 600);
 			graphics.endFill();
@@ -42,14 +43,14 @@ package src
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
+			var totalTowers : int = 3;
 			
-			
-			for (var i : int = 0; i < 3; i++) {
+			for (var i : int = 0; i < totalTowers; i++) {
 				
 				createTower();
-				towers[i].x = stage.stageWidth * (i * 0.5);
+				towers[i].x = stage.stageWidth / (totalTowers - 1) * i;
 				
-				towers[i].y = stage.stageHeight - towers[i].height / 2;
+				towers[i].y = stage.stageHeight - towers[i].height - 25;
 			}
 			
 			addEventListener(Event.ENTER_FRAME, loop);
@@ -75,7 +76,6 @@ package src
 			for (var i : int = 0; i < towers.length; i++) {
 				
 				if (towers[i].mouseX + towers[i].mouseY < close) {
-					
 					close = towers[i].mouseX + towers[i].mouseY;
 					chooseTower = i;
 				}	

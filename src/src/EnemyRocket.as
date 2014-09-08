@@ -11,6 +11,17 @@ package src
 		public function EnemyRocket() 
 		{
 			super();
+			
+			graphics.clear();
+			
+			graphics.beginFill(0x000000, 1);
+			graphics.drawCircle(20, 0, 2);
+			graphics.endFill();
+			
+			graphics.beginFill(0x8C4439, 1);
+			graphics.drawRect(0, -2, 20, 4);
+			graphics.endFill();
+			
 			id = 2;
 			speed = 1.3;
 		}

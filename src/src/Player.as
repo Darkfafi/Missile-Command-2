@@ -1,5 +1,6 @@
 package src 
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -10,8 +11,8 @@ package src
 	 */
 	public class Player extends Sprite
 	{
-		public var ammo : int = 5;  
-		private var maxAmmo : int = 5;
+		public var ammo : int = 15;  
+		private var maxAmmo : int = 15;
 		private var mousePosition : Vector2D = new Vector2D();
 		
 		public function Player() 

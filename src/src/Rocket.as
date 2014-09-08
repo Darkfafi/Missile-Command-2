@@ -24,7 +24,7 @@ package src
 			graphics.drawCircle(20, 0, 2);
 			graphics.endFill();
 			
-			graphics.beginFill(0x8b8b83, 1);
+			graphics.beginFill(0x398B44, 1);
 			graphics.drawRect(0, -2, 20, 4);
 			graphics.endFill();
 		}
