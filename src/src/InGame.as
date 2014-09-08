@@ -6,7 +6,9 @@ package src
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.utils.setTimeout;
 	import src.utils.Vector2D;
+	
 	/**
 	 * ...
 	 * @author Ramses di Perna
@@ -23,21 +25,31 @@ package src
 		private var _velocity : Vector2D = new Vector2D();
 		private var shotClicked : Vector2D = new Vector2D();
 		
+		private var level : int = 1;
+		private var totalRocketsMade : int = 0;
+		private var totalRocketsSpawn : int;
 		
 		public function InGame() 
 		{
 			this.addEventListener(Event.ADDED_TO_STAGE, init);
-			//-----------Background-------------\\
 			
-			graphics.beginFill(0x6495ed, 1);
+			createBackground(0x6495ed, 0x696969);
+			
+			levelSpawnSystem();
+			
+		}
+		
+		private function createBackground(colorSky : uint,colorGround : uint):void {
+			
+			graphics.beginFill(colorSky, 1);
 			graphics.drawRect(0, 0, 800, 600);
 			graphics.endFill();
 			
-			graphics.beginFill(0x696969, 1);
+			graphics.beginFill(colorGround, 1);
 			graphics.drawRect(0, 550, 800, 50);
 			graphics.endFill();
-			//------------------------------------//
 		}
+		
 		
 		private function init(e:Event):void 
 		{
@@ -66,6 +78,27 @@ package src
 		private function loop(e:Event):void 
 		{	
 			rocketsUpdate();
+			
+			if (totalRocketsMade >= totalRocketsSpawn && checkForEnemyRockets() == false) {
+				
+				trace("Level Compleat!");
+				level ++;
+				totalRocketsMade = 0;
+				levelSpawnSystem();
+			}
+			
+		}
+		private function checkForEnemyRockets():Boolean {
+			
+			for (var i : int = 0; i < rockets.length; i++) {
+				
+				if (rockets[i].id == 2) {
+					
+					return true;
+					break;
+				}
+			}
+			return false;
 		}
 		
 		private function shoot(e:MouseEvent):void {
@@ -103,7 +136,7 @@ package src
 				rockets.push(rocket);
 				
 				addChildAt(rocket,0);
-				spawnEnemyRockets();
+				//spawnEnemyRockets();
 				
 				
 			}else {
@@ -152,6 +185,7 @@ package src
 					explosions.splice(j, 1);
 				}
 			}
+			
 		}
 		
 		public function explode(target : DisplayObject):void {
@@ -168,29 +202,43 @@ package src
 			rockets.splice(index, 1);
 		}
 		
-		private function spawnEnemyRockets():void {
-			
-			var enemyRocket : EnemyRocket = new EnemyRocket();
-			
-			enemyRocket.x = Math.random() * stage.stageWidth; 
-			enemyRocket.y = 0 - enemyRocket.width;
-			
-			var randomTower : int = Math.random() * towers.length; 
-			
-			var tri : Point = new Point(towers[randomTower].x - enemyRocket.x, towers[randomTower].y - enemyRocket.y);
-			
-			enemyRocket.rotation = Math.atan2(tri.y, tri.x) * 180 / Math.PI;
-			
-			var xMove:Number = Math.cos(enemyRocket.rotation / 180 * Math.PI);
-			var yMove:Number = Math.sin(enemyRocket.rotation / 180 * Math.PI);
+		private function spawnEnemyRockets(totalRockets : int):void {
+			for (var i : int = 0; i < totalRockets; i++ ){
+				var enemyRocket : EnemyRocket = new EnemyRocket();
 				
-			enemyRocket.movement.x = xMove;
-			enemyRocket.movement.y = yMove;
+				enemyRocket.x = Math.random() * stage.stageWidth; 
+				enemyRocket.y = 0 - enemyRocket.width;
+				
+				var randomTower : int = Math.random() * towers.length; 
+				
+				var tri : Point = new Point(towers[randomTower].x - enemyRocket.x, towers[randomTower].y - enemyRocket.y);
+				
+				enemyRocket.rotation = Math.atan2(tri.y, tri.x) * 180 / Math.PI;
+				
+				var xMove:Number = Math.cos(enemyRocket.rotation / 180 * Math.PI);
+				var yMove:Number = Math.sin(enemyRocket.rotation / 180 * Math.PI);
+					
+				enemyRocket.movement.x = xMove;
+				enemyRocket.movement.y = yMove;
+				
+				rockets.push(enemyRocket);
+				
+				addChild(enemyRocket);
+			}
+			levelSpawnSystem();
+		}
+		
+		private function levelSpawnSystem():void {
 			
-			rockets.push(enemyRocket);
+			totalRocketsSpawn = 12 * (level / 2);
 			
-			addChild(enemyRocket);
+			if(totalRocketsMade < totalRocketsSpawn){
+				var delay : int = 6000;
+				
+				var timeUntilNextWave : Number = setTimeout(spawnEnemyRockets, delay, (Math.floor(Math.random() * level + 3)));
+				totalRocketsMade += Math.floor(Math.random() * level + 3);
+				trace(totalRocketsMade + " <-- made/ total --> " + totalRocketsSpawn);
+			}
 		}
 	}
-
 }
