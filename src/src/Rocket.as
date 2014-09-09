@@ -10,13 +10,15 @@ package src
 	 */
 	public class Rocket extends Sprite 
 	{
-		public var id : int = 1;
+		public var id : int = new int(1);
 		
 		public var speed : Number = 15; 
 		
 		public var movement : Point = new Point();
 		
 		public var destination : Number;
+		
+		public var target : Sprite = new Sprite();
 		
 		public function Rocket() 
 		{

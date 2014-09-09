@@ -32,10 +32,10 @@ package src
 		
 		private function movement(e:MouseEvent):void 
 		{
-				this.rotation = 0;
-				mousePosition.x = this.mouseX;
-				mousePosition.y = this.mouseY;
-				this.rotation = mousePosition.angle * 180 / Math.PI;
+			this.rotation = 0;
+			mousePosition.x = this.mouseX;
+			mousePosition.y = this.mouseY;
+			this.rotation = mousePosition.angle * 180 / Math.PI;
 		}
 		
 		public function reload():void {

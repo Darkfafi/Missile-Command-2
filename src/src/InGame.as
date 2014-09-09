@@ -15,7 +15,8 @@ package src
 	 */
 	public class InGame extends MovieClip 
 	{
-		private var towers : Array = [];
+		private var allTowers : Array = [];
+		private var activeTowers : Array = [];
 		
 		private var rockets : Array = [];
 		
@@ -28,6 +29,8 @@ package src
 		private var level : int = 1;
 		private var totalRocketsMade : int = 0;
 		private var totalRocketsSpawn : int;
+		
+		private var totalTowers : int = 3;
 		
 		public function InGame() 
 		{
@@ -55,24 +58,24 @@ package src
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			
-			var totalTowers : int = 3;
-			
-			for (var i : int = 0; i < totalTowers; i++) {
-				
-				createTower();
-				towers[i].x = stage.stageWidth / (totalTowers - 1) * i;
-				
-				towers[i].y = stage.stageHeight - towers[i].height - 25;
-			}
+			createTowers(totalTowers);
 			
 			addEventListener(Event.ENTER_FRAME, loop);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, shoot);
 		}
 		
-		private function createTower():void {
-			var player : Player = new Player();
-			addChildAt(player,0);
-			towers.push(player);
+		private function createTowers(t : int):void {
+			for (var i : int = 0; i < t; i++) {
+				
+				var player : Player = new Player();
+				addChildAt(player,0);
+				activeTowers.push(player);
+				allTowers.push(player);
+				
+				activeTowers[i].x = stage.stageWidth / (t - 1) * i;
+				
+				activeTowers[i].y = stage.stageHeight - activeTowers[i].height - 25;
+			}
 		}
 		
 		private function loop(e:Event):void 
@@ -81,10 +84,17 @@ package src
 			
 			if (totalRocketsMade >= totalRocketsSpawn && checkForEnemyRockets() == false) {
 				
-				trace("Level Compleat!");
+				trace("Level Complete!");
+				
+				var l : int = activeTowers.length;
+				
+				for (var i : int = 0; i < l; i++) {
+					activeTowers[i].reload();
+				}
 				level ++;
 				totalRocketsMade = 0;
 				levelSpawnSystem();
+				
 			}
 			
 		}
@@ -102,45 +112,41 @@ package src
 		}
 		
 		private function shoot(e:MouseEvent):void {
-			
-			var close : Number = new Number(Number.MAX_VALUE);
-			var chooseTower : int;
-			
-			for (var i : int = 0; i < towers.length; i++) {
+			if(activeTowers.length > 0){
+				var close : Number = new Number(Number.MAX_VALUE);
+				var chooseTower : int;
 				
-				if (towers[i].mouseX + towers[i].mouseY < close) {
-					close = towers[i].mouseX + towers[i].mouseY;
-					chooseTower = i;
-				}	
-			}
-			trace("Ammo: " + towers[chooseTower].ammo);
-			
-			if(towers[chooseTower].ammo > 0){
-				towers[chooseTower].ammo -= 1;
+				for (var i : int = 0; i < activeTowers.length; i++) {
+					
+					if (activeTowers[i].mouseX + activeTowers[i].mouseY < close && activeTowers[i].ammo > 0) {
+						close = activeTowers[i].mouseX + activeTowers[i].mouseY;
+						chooseTower = i;
+					}	
+				}
+				trace("Ammo: " + activeTowers[chooseTower].ammo);
 				
-				var rocket : Rocket = new Rocket();
-				
-				rocket.x = towers[chooseTower].x;
-				rocket.y = towers[chooseTower].y;
-				
-				rocket.rotation = towers[chooseTower].rotation;
-				
-				rocket.destination = mouseY;
-				
-				var xMove:Number = Math.cos(rocket.rotation / 180 * Math.PI);
-				var yMove:Number = Math.sin(rocket.rotation / 180 * Math.PI);
-				
-				rocket.movement.x = xMove;
-				rocket.movement.y = yMove;
-				
-				rockets.push(rocket);
-				
-				addChildAt(rocket,0);
-				//spawnEnemyRockets();
-				
-				
-			}else {
-				towers[chooseTower].reload();
+				if(activeTowers[chooseTower].ammo > 0){
+					activeTowers[chooseTower].ammo -= 1;
+					
+					var rocket : Rocket = new Rocket();
+					
+					rocket.x = activeTowers[chooseTower].x;
+					rocket.y = activeTowers[chooseTower].y;
+					
+					rocket.rotation = activeTowers[chooseTower].rotation;
+					
+					rocket.destination = mouseY;
+					
+					var xMove:Number = Math.cos(rocket.rotation / 180 * Math.PI);
+					var yMove:Number = Math.sin(rocket.rotation / 180 * Math.PI);
+					
+					rocket.movement.x = xMove;
+					rocket.movement.y = yMove;
+					
+					rockets.push(rocket);
+					
+					addChildAt(rocket,0);
+				}
 			}
 		}
 		
@@ -152,11 +158,17 @@ package src
 				rockets[i].x += rockets[i].movement.x * rockets[i].speed;
 				rockets[i].y += rockets[i].movement.y * rockets[i].speed;
 				
-				if (rockets[i].y <= rockets[i].destination) {
+				if (rockets[i].id == 2 && rockets[i].y >= rockets[i].target.y) {
+					
+					var index : int = activeTowers.indexOf(rockets[i].target);
+					activeTowers.splice(index, 1);
+					explode(rockets[i]);
+					
+				}else if (rockets[i].id == 1 && rockets[i].y <= rockets[i].destination) {
 					
 					explode(rockets[i]);
 				}
-				
+					
 				//hit test with explosions
 				for (var k : int = 0; k < explosions.length; k++) {
 					if(rockets[i] != null){
@@ -209,9 +221,9 @@ package src
 				enemyRocket.x = Math.random() * stage.stageWidth; 
 				enemyRocket.y = 0 - enemyRocket.width;
 				
-				var randomTower : int = Math.random() * towers.length; 
+				var randomTower : int = Math.random() * activeTowers.length; 
 				
-				var tri : Point = new Point(towers[randomTower].x - enemyRocket.x, towers[randomTower].y - enemyRocket.y);
+				var tri : Point = new Point(activeTowers[randomTower].x - enemyRocket.x, activeTowers[randomTower].y - enemyRocket.y);
 				
 				enemyRocket.rotation = Math.atan2(tri.y, tri.x) * 180 / Math.PI;
 				
@@ -221,10 +233,15 @@ package src
 				enemyRocket.movement.x = xMove;
 				enemyRocket.movement.y = yMove;
 				
+				enemyRocket.target = activeTowers[randomTower];
+				trace(enemyRocket.target);
+				
 				rockets.push(enemyRocket);
 				
 				addChild(enemyRocket);
 			}
+			totalRocketsMade += totalRockets;
+			trace(totalRocketsMade + " <-- made/ total --> " + totalRocketsSpawn);
 			levelSpawnSystem();
 		}
 		
@@ -236,8 +253,6 @@ package src
 				var delay : int = 6000;
 				
 				var timeUntilNextWave : Number = setTimeout(spawnEnemyRockets, delay, (Math.floor(Math.random() * level + 3)));
-				totalRocketsMade += Math.floor(Math.random() * level + 3);
-				trace(totalRocketsMade + " <-- made/ total --> " + totalRocketsSpawn);
 			}
 		}
 	}

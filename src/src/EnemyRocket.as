@@ -1,13 +1,13 @@
 package src 
 {
+	import flash.display.Sprite;
 	import flash.events.Event;
 	/**
 	 * ...
 	 * @author Ramses di Perna
 	 */
 	public class EnemyRocket extends Rocket
-	{
-		
+	{	
 		public function EnemyRocket() 
 		{
 			super();
