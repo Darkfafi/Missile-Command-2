@@ -75,6 +75,7 @@ package src
 				activeTowers[i].x = stage.stageWidth / (t - 1) * i;
 				
 				activeTowers[i].y = stage.stageHeight - activeTowers[i].height - 25;
+				activeTowers[i].rotation = 270;
 			}
 		}
 		
@@ -87,17 +88,18 @@ package src
 				trace("Level Complete!");
 				
 				var l : int = activeTowers.length;
-				
-				for (var j : int = 0; j < allTowers.length; j++) {
+				for (var j : int = 0; j < l; j++) {
 					for (var i : int = 0; i < l; i++) {
 						//activeTowers[i].reload();
 						activeTowers.splice(i, 1);
 					}
-					removeChild(allTowers[j]);
+					if(allTowers[j] != null){
+						removeChild(allTowers[j]);
+					}
 					allTowers.splice(j,1);
 				}
 				
-			createTowers(totalTowers);
+				createTowers(totalTowers);
 				
 				level ++;
 				totalRocketsMade = 0;
@@ -169,8 +171,11 @@ package src
 				if (rockets[i].id == 2 && rockets[i].y >= rockets[i].target.y) {
 					
 					var index : int = activeTowers.indexOf(rockets[i].target);
-					//removeChild(rockets[i].target);
-					activeTowers.splice(index, 1);
+					
+					if(activeTowers[index] != null){
+						//removeChild(activeTowers[index]);
+						activeTowers.splice(index, 1);
+					}
 					explode(rockets[i]);
 					
 				}else if (rockets[i].id == 1 && rockets[i].y <= rockets[i].destination) {
