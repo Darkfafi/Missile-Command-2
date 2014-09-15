@@ -88,11 +88,11 @@ package src
 				
 				var l : int = activeTowers.length;
 				
-				for (var i : int = 0; i < l; i++) {
-					//activeTowers[i].reload();
-					activeTowers.splice(i, 1);
-				}
 				for (var j : int = 0; j < allTowers.length; j++) {
+					for (var i : int = 0; i < l; i++) {
+						//activeTowers[i].reload();
+						activeTowers.splice(i, 1);
+					}
 					removeChild(allTowers[j]);
 					allTowers.splice(j,1);
 				}
