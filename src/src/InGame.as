@@ -7,6 +7,7 @@ package src
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
+	import src.utils.RocketFactory;
 	import src.utils.Vector2D;
 	
 	/**
@@ -15,6 +16,8 @@ package src
 	 */
 	public class InGame extends MovieClip 
 	{
+		private var rocketFactory : RocketFactory = new RocketFactory();
+		
 		private var allTowers : Array = [];
 		private var activeTowers : Array = [];
 		
@@ -138,7 +141,7 @@ package src
 				if(activeTowers[chooseTower].ammo > 0){
 					activeTowers[chooseTower].ammo -= 1;
 					
-					var rocket : Rocket = new Rocket();
+					var rocket : Rocket = rocketFactory.makeRocket(RocketFactory.NORMAL_ROCKET);
 					
 					rocket.x = activeTowers[chooseTower].x;
 					rocket.y = activeTowers[chooseTower].y;
@@ -230,7 +233,7 @@ package src
 		
 		private function spawnEnemyRockets(totalRockets : int):void {
 			for (var i : int = 0; i < totalRockets; i++ ){
-				var enemyRocket : EnemyRocket = new EnemyRocket();
+				var enemyRocket : Rocket = rocketFactory.makeRocket(RocketFactory.NORMAL_ENEMY_ROCKET);
 				
 				enemyRocket.x = Math.random() * stage.stageWidth; 
 				enemyRocket.y = 0 - enemyRocket.width;
