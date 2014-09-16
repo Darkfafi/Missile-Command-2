@@ -7,7 +7,6 @@ package src
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
-	import src.utils.RocketFactory;
 	import src.utils.Vector2D;
 	
 	/**
@@ -90,14 +89,16 @@ package src
 				
 				trace("Level Complete!");
 				
-				var l : int = activeTowers.length;
-				for (var j : int = 0; j < l; j++) {
-					for (var i : int = 0; i < l; i++) {
+				var la : int = activeTowers.length;
+				var lb : int = allTowers.length;
+				for (var j : int = la; j >= 0; j--) {
+					for (var i : int = lb; i >= 0; i--) {
 						//activeTowers[i].reload();
 						activeTowers.splice(i, 1);
 					}
 					if(allTowers[j] != null){
 						removeChild(allTowers[j]);
+						//trace("removing!!!!!!")
 					}
 					allTowers.splice(j,1);
 				}
@@ -125,28 +126,29 @@ package src
 		}
 		
 		private function shoot(e:MouseEvent):void {
+			
+			var close : Number = new Number(Number.MAX_VALUE);
+			var chosenTower : Player;
 			if(activeTowers.length > 0){
-				var close : Number = new Number(Number.MAX_VALUE);
-				var chooseTower : int;
 				
 				for (var i : int = 0; i < activeTowers.length; i++) {
 					
 					if (activeTowers[i].mouseX + activeTowers[i].mouseY < close && activeTowers[i].ammo > 0) {
 						close = activeTowers[i].mouseX + activeTowers[i].mouseY;
-						chooseTower = i;
+						chosenTower = activeTowers[i];
 					}	
 				}
-				trace("Ammo: " + activeTowers[chooseTower].ammo);
+				trace("Ammo: " + chosenTower.ammo);
 				
-				if(activeTowers[chooseTower].ammo > 0){
-					activeTowers[chooseTower].ammo -= 1;
+				if(chosenTower.ammo > 0){
+					chosenTower.ammo -= 1;
 					
 					var rocket : Rocket = rocketFactory.makeRocket(RocketFactory.NORMAL_ROCKET);
 					
-					rocket.x = activeTowers[chooseTower].x;
-					rocket.y = activeTowers[chooseTower].y;
+					rocket.x = chosenTower.x;
+					rocket.y = chosenTower.y;
 					
-					rocket.rotation = activeTowers[chooseTower].rotation;
+					rocket.rotation = chosenTower.rotation;
 					
 					rocket.destination = mouseY;
 					
@@ -168,8 +170,7 @@ package src
 			
 			for (var i : int = 0; i < rockets.length; i++) {
 				
-				rockets[i].x += rockets[i].movement.x * rockets[i].speed;
-				rockets[i].y += rockets[i].movement.y * rockets[i].speed;
+				rockets[i].update();
 				
 				if (rockets[i].id == 2 && rockets[i].y >= rockets[i].target.y) {
 					
@@ -243,6 +244,7 @@ package src
 				var tri : Point = new Point(activeTowers[randomTower].x - enemyRocket.x, activeTowers[randomTower].y - enemyRocket.y);
 				
 				enemyRocket.rotation = Math.atan2(tri.y, tri.x) * 180 / Math.PI;
+				trace(enemyRocket.rotation);
 				
 				var xMove:Number = Math.cos(enemyRocket.rotation / 180 * Math.PI);
 				var yMove:Number = Math.sin(enemyRocket.rotation / 180 * Math.PI);

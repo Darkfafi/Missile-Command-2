@@ -1,18 +1,17 @@
 package src 
 {
 	import flash.display.Sprite;
-	import flash.events.Event;
-	import src.utils.Vector2D;
-	import flash.geom.Point;
+	import flash.geom.Point
+	
 	/**
 	 * ...
 	 * @author Ramses di Perna
 	 */
-	public class Rocket extends Sprite 
+	public class Rocket extends Sprite
 	{
-		public var id : int = new int(1);
+		public var id : int = new int();
 		
-		public var speed : Number = 15; 
+		public var speed : Number = new Number(); 
 		
 		public var movement : Point = new Point();
 		
@@ -22,13 +21,14 @@ package src
 		
 		public function Rocket() 
 		{
-			graphics.beginFill(0x000000, 1);
-			graphics.drawCircle(20, 0, 2);
-			graphics.endFill();
 			
-			graphics.beginFill(0x398B44, 1);
-			graphics.drawRect(0, -2, 20, 4);
-			graphics.endFill();
+		}
+		
+		public function update():void {
+			
+			this.x += movement.x * speed;
+			this.y += movement.y * speed;
+			
 		}
 		
 	}
